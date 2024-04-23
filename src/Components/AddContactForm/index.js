@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
+import styles from './styles.module.css';
 
 const AddContactForm = ({ contacts, setContacts }) => {
-    const [name, setName] = React.useState('');
-    const [surname, setSurname] = React.useState('');
-    const [phone, setPhone] = React.useState('');
+    const [name, setName] = useState('');
+    const [surname, setSurname] = useState('');
+    const [phone, setPhone] = useState('');
+    const [showForm, setShowForm] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -27,35 +29,43 @@ const AddContactForm = ({ contacts, setContacts }) => {
                 setName('');
                 setSurname('');
                 setPhone('');
+                setShowForm(false);
             })
             .catch(error => console.error('Error:', error));
     };
 
     const handleCancel = () => {
-        setName('');
-        setSurname('');
-        setPhone('');
+        setShowForm(false);
+    };
+
+    const showAddForm = () => {
+        setShowForm(true);
     };
 
     return (
-        <div>
-            <h2>Adding contact form</h2>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Name:
-                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-                </label>
-                <label>
-                    Surname:
-                    <input type="text" value={surname} onChange={(e) => setSurname(e.target.value)} />
-                </label>
-                <label>
-                    Phone:
-                    <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
-                </label>
-                <button type="submit">Save</button>
-                <button type="button" onClick={handleCancel}>Cancel</button>
-            </form>
+        <div className={styles['add-contact-form']}>
+            <button onClick={showAddForm} className={styles['add-contact-button']}>Adding contact</button>
+            {showForm && (
+                <>
+                    <h2>Adding contact form</h2>
+                    <form onSubmit={handleSubmit}>
+                        <label>
+                            Name:
+                            <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+                        </label>
+                        <label>
+                            Surname:
+                            <input type="text" value={surname} onChange={(e) => setSurname(e.target.value)} />
+                        </label>
+                        <label>
+                            Phone:
+                            <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                        </label>
+                        <button type="submit">Save</button>
+                        <button type="button" onClick={handleCancel}>Cancel</button>
+                    </form>
+                </>
+            )}
         </div>
     );
 };

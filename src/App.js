@@ -8,7 +8,18 @@ function App() {
     useEffect(() => {
         fetch('https://jsonplaceholder.typicode.com/users')
             .then(response => response.json())
-            .then(data => setContacts(data));
+            .then(data => {
+                const modifiedData = data.map(contact => {
+                    const [firstName, ...lastNameArray] = contact.name.split(' ');
+                    const lastName = lastNameArray.join(' ');
+                    return {
+                        ...contact,
+                        name: firstName,
+                        surname: lastName
+                    };
+                });
+                setContacts(modifiedData);
+            });
     }, []);
 
     return (
